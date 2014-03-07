@@ -1,7 +1,6 @@
 
 
 
-
 # TODO
 
 - idées de parallélisation ?
@@ -17,6 +16,7 @@
 - on veut de la rigueur !
 - se renseigner sur les bornes supérieures
 - trouver une borne sup'
+- Obtention du min suivant par récurrence (Ex : passer de 6 fils à 8 ?)
 
 
 
