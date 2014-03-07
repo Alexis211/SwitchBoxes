@@ -109,15 +109,20 @@ let max_boxset n k =
         if Permset.cardinal permset > Permset.cardinal (snd !max_permset) then
             max_permset := (boxsys, permset);
         if k' > 0 then
+            let qm = ref 0 in
             let pi = prand n in
             for u = 0 to n-1 do
                 let i = pi.(u) in
                 for v = u+1 to n-1 do
                     let j = pi.(v) in
                     let new_permset = with_new_box permset (i, j) in
-                    if Permset.cardinal new_permset > Permset.cardinal permset &&
-                        Permset.cardinal (snd !max_permset) < target then
-                        aux (k' - 1) ((i, j)::boxsys) new_permset
+                    let npsc = Permset.cardinal new_permset in
+                    if npsc >= !qm then begin
+                        qm := npsc;
+                        if Permset.cardinal new_permset > Permset.cardinal permset &&
+                            Permset.cardinal (snd !max_permset) < target then
+                            aux (k' - 1) ((i, j)::boxsys) new_permset
+                    end
                 done
             done
     in
@@ -127,9 +132,10 @@ let max_boxset n k =
 
 
 let () =
-    let n, k = 6, 10 in
+    let n, k = 6, 11 in
+
+    Format.printf "Calculating for n = %d, k = %d :@." n k;
     let boxset, permset = max_boxset n k in
-    Format.printf "n = %d, k = %d, found :@." n k;
     List.iter (fun (i, j) -> Format.printf "(%d, %d) " i j) boxset; Format.printf "@.";
     Format.printf "Got %d permutations, %d! = %d@." (Permset.cardinal permset) n (fact n)
     
