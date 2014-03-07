@@ -127,8 +127,9 @@ let max_boxset n k =
 
 
 let () =
-    let n, k = 6, 12 in
+    let n, k = 6, 10 in
     let boxset, permset = max_boxset n k in
+    Format.printf "n = %d, k = %d, found :@." n k;
     List.iter (fun (i, j) -> Format.printf "(%d, %d) " i j) boxset; Format.printf "@.";
     Format.printf "Got %d permutations, %d! = %d@." (Permset.cardinal permset) n (fact n)
     
