@@ -14,15 +14,15 @@ let get_permutation n box_list command_list =
   try
     List.fold_left2
       (fun permutation (box_fst,box_snd) command ->
-	let _ =
-	  if command then
-	    begin
-	      let e = permutation.(box_fst) in
-	      permutation.(box_fst) <- permutation.(box_snd);
-	      permutation.(box_snd) <- e
-	    end
-	in
-	permutation)
+        let _ =
+          if command then
+            begin
+              let e = permutation.(box_fst) in
+              permutation.(box_fst) <- permutation.(box_snd);
+              permutation.(box_snd) <- e
+            end
+        in
+        permutation)
       (let permutation = Array.create n 0 in
        for i = 1 to n-1 do permutation.(i) <- i done; permutation)
       box_list
@@ -46,10 +46,10 @@ let apply_permutation permutation wire_state =
     begin
       let wire_state_after = Array.create n false in
       for i = 0 to n-1 do
-	wire_state_after.( permutation.(i) ) <- wire_state.(i)
+        wire_state_after.( permutation.(i) ) <- wire_state.(i)
       done;
       for i = 0 to n-1 do
-	wire_state.(i) <- wire_state_after.(i)
+        wire_state.(i) <- wire_state_after.(i)
       done
     end
 
@@ -71,9 +71,9 @@ let next_bitarray array =
   let rec aux_next_bitarray pos bit =
     if pos<array_size then
       begin
-	let result = aux_next_bitarray (pos+1) (array.(pos)&&bit) in
-	array.(pos) <- (if bit then not else (fun x -> x)) (array.(pos));
-	result
+        let result = aux_next_bitarray (pos+1) (array.(pos)&&bit) in
+        array.(pos) <- (if bit then not else (fun x -> x)) (array.(pos));
+        result
       end
     else
       bit
@@ -110,8 +110,8 @@ let test_boxlist n box_list =
     (List.fast_sort
        Pervasives.compare
        (List.map
-	  (fun a -> get_permutation n box_list (Array.to_list a))
-	  (enumerate_bitarrays n))))
+          (fun a -> get_permutation n box_list (Array.to_list a))
+          (enumerate_bitarrays n))))
 
 
 
@@ -133,10 +133,10 @@ let calc_boxes n =
     | (i,j)::q as l ->
       if j<n-1 then aux_calc_boxes ((i,j+1)::l)
       else
-	begin
-	  if i<n-2 then aux_calc_boxes ((i+1,i+2)::l)
-	  else l
-	end
+        begin
+          if i<n-2 then aux_calc_boxes ((i+1,i+2)::l)
+          else l
+        end
   in
   aux_calc_boxes []
 
@@ -152,10 +152,10 @@ let calc_boxlists n k =
     if l >= k then boxlists
     else
       aux_calc_boxlists (l+1)
-	(List.concat
-	   (List.map
-	      (fun boxlist -> List.map (fun box -> box::boxlist) boxes)
-	      boxlists))
+        (List.concat
+           (List.map
+              (fun boxlist -> List.map (fun box -> box::boxlist) boxes)
+              boxlists))
   in
   if n>=4 then
     List.map
