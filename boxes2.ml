@@ -132,7 +132,7 @@ let max_boxset n k =
 
 
 let () =
-    let n, k = 6, 11 in
+    let n, k = 6, 10 in
 
     Format.printf "Calculating for n = %d, k = %d :@." n k;
     let boxset, permset = max_boxset n k in
