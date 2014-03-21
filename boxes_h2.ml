@@ -8,9 +8,6 @@ module Perm = struct
 end
 module Permset = Set.Make(Perm)
 
-
-(* On récupère le testeur de boites de boxes2.ml *)
-
 (* with_new_box : Permset.t -> box -> Permset.t *)
 let with_new_box (p : Permset.t) ((i, j) : box) =
     Permset.union p
@@ -35,26 +32,9 @@ let test_boxsys n (bs : boxsys) =
        bs)
   == fact n
 
-let n = 3
-let bs = [0,1;1,2;0,1]
 
-let n = 4
-let bs = [ 0,1; 2,3; 0,2; 1,3; 0,1; 2,3 ]
-let b = test_boxsys n bs in b
 
-let n = 6
-let bs = [ 0,1; 1,2; 0,1; 3,4; 4,5; 3,4; 0,3; 1,4; 2,5; 0,1; 1,2; 0,1; 3,4; 4,5; 3,4 ]
-let b = test_boxsys n bs in b
 
-let n = 8
-let bs = [ 0,1; 2,3; 4,5; 6,7;
-	   0,2; 1,3; 4,6; 5,7; 
-	   0,4; 1,5; 2,6; 3,7;
-	   0,2; 1,3; 4,6; 5,7; 
-	   0,1; 2,3; 4,5; 6,7; ]
-let b = test_boxsys n bs in b
-
-(* Ne marche que pour les puissances de 2 pour le moment *)
 let generate_boxsys k =
   let pow2 k = 1 lsl k in
   let n = pow2 k in  
@@ -71,5 +51,24 @@ let generate_boxsys k =
   done;
   List.rev (!bs)
 
-let k = 4 in
-let b = test_boxsys (1 lsl k) (generate_boxsys k) in b
+let print_bs bs =
+  let rec aux = function
+    | [] -> ()
+    | (i,j)::t ->
+      Format.printf "(%d,%d); " i j;
+      aux t
+  in
+  Format.printf "[ ";
+  aux bs;
+  Format.printf "];@."
+
+let _ =
+  let k = 4 in
+  let n = 1 lsl k in
+  Format.printf "Début du test.\nk = %d, n = %d.@." k n;
+  let bs = generate_boxsys k in
+  print_bs bs;
+  if test_boxsys n bs then
+    Format.printf "Ca marche !@."
+  else
+    Format.printf "Ca ne marche pas :'(@."
