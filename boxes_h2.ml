@@ -32,9 +32,6 @@ let test_boxsys n (bs : boxsys) =
        bs)
   == fact n
 
-
-
-
 let generate_boxsys k =
   let pow2 k = 1 lsl k in
   let n = pow2 k in  
@@ -51,6 +48,10 @@ let generate_boxsys k =
   done;
   List.rev (!bs)
 
+let true_gen_bs n =
+  let k1 = int_of_float (ceil (log (float_of_int n)/.log 2.)) in
+  List.filter (fun (i,j) -> i<n && j<n) (generate_boxsys k1)
+
 let print_bs bs =
   let rec aux = function
     | [] -> ()
@@ -62,6 +63,7 @@ let print_bs bs =
   aux bs;
   Format.printf "];@."
 
+(*
 let _ =
   let k = 4 in
   let n = 1 lsl k in
@@ -72,3 +74,22 @@ let _ =
     Format.printf "Ca marche !@."
   else
     Format.printf "Ca ne marche pas :'(@."
+*)
+
+let _ =
+  let n = ref 2 in
+  while true do
+    Format.printf "\nDébut du test pour n = %d.\nVoici le système de boites:@." !n;
+    let bs = true_gen_bs !n in
+    print_bs bs;
+    Format.printf "C'est un système de %d boites.@." (List.length bs);
+    if test_boxsys !n bs then
+      begin
+	Format.printf "Il engendre toutes les permutations.@.";
+      end
+    else
+      begin
+	Format.printf "Echec: il n'engendre pas toutes les permutations.@.";
+      end;
+    incr n
+  done
