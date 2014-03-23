@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 
 /* Utility */
@@ -93,15 +94,16 @@ int bitset_unset(unsigned char* bitset, id x) {
 */
 
 int check_permset(const int n, const int p, const int* l, const int* r) {
-	id x, y;
+	id x;
 	int i, t;
 
 	id perms = fact(n);
-	unsigned char T[perms/8+1];
+	unsigned char *T = malloc((perms/8+1));
 	for (x = 0; x < perms/8+1; x++) T[x] = 0;
 	bitset_set(T, 0);
 
 	for (i = 0; i < p; i++) {
+		fprintf(stderr, "Adding box %d: (%d, %d)\n", i, l[i], r[i]);
 		for (x = 0; x < perms; x++) {
 			if (bitset_get(T, x)) {
 				int perm[n];
@@ -117,6 +119,9 @@ int check_permset(const int n, const int p, const int* l, const int* r) {
 	for (x = 0; x < perms; x++) {
 		if (!bitset_get(T, x)) return 0;
 	}
+
+	free(T);
+
 	return 1;
 }
 
