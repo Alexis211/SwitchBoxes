@@ -180,7 +180,7 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 	id x;
 	int i, j;
 
-	id perms = fact(n), nperms;
+	id perms = fact(n), nperms, prevnperms;
 	bits *T = malloc((perms/NBITS+1)*sizeof(bits));
 	bits *T2 = malloc((perms/NBITS+1)*sizeof(bits));
 	for (x = 0; x < perms/NBITS+1; x++) T[x] = T2[x] = 0;
@@ -196,10 +196,9 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 	}
 	pthread_t thread[PARA];
 
+	prevnperms = 42;
+	nperms = 1;
 	for (i = 0; i < p; i++) {
-		fprintf(stderr, "Counting... "); fflush(stderr);
-		nperms = bitset_count(T, perms);
-		fprintf(stderr, "%ld \\ %ld = %ld\n", nperms, perms, perms / nperms);
 		fprintf(stderr, "Adding box %d: (%d, %d)\n", i, l[i], r[i]);
 
 		for (j = 0; j < PARA; j++) {
@@ -215,15 +214,20 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 			T[x] |= T2[x];
 		}
 		fprintf(stderr, "OK.\n");
-	}
 
-	for (x = 0; x < perms; x++) {
-		if (!bitset_get(T, x)) return 0;
+		fprintf(stderr, "Counting... "); fflush(stderr);
+		prevnperms = nperms;
+		nperms = bitset_count(T, perms);
+		fprintf(stderr, "%ld \\ %ld = %ld\n", nperms, perms, perms / nperms);
+		if (nperms == prevnperms) {
+			fprintf(stderr, ">> Useless box: (%d, %d) <<\n", l[i], r[i]);
+		}
 	}
 
 	free(T);
-
-	return 1;
+	free(T2);
+	
+	return (nperms == perms ? 1 : 0);
 }
 
 
@@ -239,8 +243,10 @@ int main() {
   for(i = 0; i < p; i++) {
     scanf(" %d %d", &l[i], &r[i]);
   }
-	
-  printf ("%d\n", check_boxsys(n, p, l, r));
+
+  int res = check_boxsys(n, p, l, r);
+  fprintf(stderr, "%s\n", (res ? "It works!" : "It does not work..."));
+  printf ("%d\n", res);
 
   return 0;
 }
