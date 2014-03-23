@@ -182,7 +182,8 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 
 	id perms = fact(n), nperms;
 	bits *T = malloc((perms/NBITS+1)*sizeof(bits));
-	for (x = 0; x < perms/NBITS+1; x++) T[x] = 0;
+	bits *T2 = malloc((perms/NBITS+1)*sizeof(bits));
+	for (x = 0; x < perms/NBITS+1; x++) T[x] = T2[x] = 0;
 	bitset_set(T, 0);
 
 	struct task t[PARA];
@@ -190,8 +191,7 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 		t[j].begin = ((id)j * perms) / PARA;
 		t[j].end = (((id)j+1) * perms) / PARA;
 		t[j].prev_T = T;
-		t[j].my_T = malloc((perms/NBITS+1)*sizeof(bits));
-		for (x = 0; x < perms/NBITS+1; x++) t[j].my_T[x] = 0;
+		t[j].my_T = T2;
 		t[j].n = n;
 	}
 	pthread_t thread[PARA];
@@ -210,8 +210,9 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 		}
 		for (j = 0; j < PARA; j++) {
 			pthread_join(thread[j], NULL);
-			for (x = 0; x < perms/NBITS+1; x++)
-				T[x] |= t[j].my_T[x];
+		}
+		for (x = 0; x < perms/NBITS+1; x++) {
+			T[x] |= T2[x];
 		}
 		fprintf(stderr, "OK.\n");
 	}
