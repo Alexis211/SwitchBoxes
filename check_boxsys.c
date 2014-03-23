@@ -67,22 +67,56 @@ void perm_of_id(id x, const int n, int* perm) {
 
 /* Bitsets */
 
-int bitset_get(unsigned char* bitset, id x) {
-  id pos = x / 8;
-  id sh = x % 8;
+typedef unsigned long long int bits;
+#define NBITS (8*(sizeof(bits)))
+
+int bitset_get(bits* bitset, id x) {
+  id pos = x / NBITS;
+  id sh = x % NBITS;
   return (bitset[pos] >> sh) & 1;
 }
 
-int bitset_set(unsigned char* bitset, id x) {
-  id pos = x / 8;
-  id sh = x % 8;
-  bitset[pos] |= (1 << sh);
+int bitset_set(bits* bitset, id x) {
+  id pos = x / NBITS;
+  id sh = x % NBITS;
+  bitset[pos] |= ((bits)1 << sh);
 }
 
-int bitset_unset(unsigned char* bitset, id x) {
-  id pos = x / 8;
-  id sh = x % 8;
-  bitset[pos] &= ~(1 << sh);
+int bitset_unset(bits* bitset, id x) {
+  id pos = x / NBITS;
+  id sh = x % NBITS;
+  bitset[pos] &= ~((bits)1 << sh);
+}
+
+id bitset_count(bits *bitset, id max) {
+	id i;
+	id count = 0;
+	id posmax = max / NBITS;
+
+	for (i = 0; i < posmax; i++) {
+		bits x = bitset[i];
+		if (NBITS == 64) {
+			x = (x & 0x5555555555555555) + 
+				((x >> 1) & 0x5555555555555555);
+			x = (x & 0x3333333333333333) +
+				((x >> 2) & 0x3333333333333333);
+			x = (x & 0x0F0F0F0F0F0F0F0F) +
+				((x >> 4) & 0x0F0F0F0F0F0F0F0F);
+			x = (x & 0x00FF00FF00FF00FF) +
+				((x >> 8) & 0x00FF00FF00FF00FF);
+			x = (x & 0x0000FFFF0000FFFF) +
+				((x >> 16) & 0x0000FFFF0000FFFF);
+			x = (x & 0xFFFFFFFF) +
+				((x >> 32) & 0xFFFFFFFF);
+			count += x;
+		} else {
+			fprintf(stderr, "CANNOT COUNT!\n");
+		}
+	}
+	for (i = posmax * NBITS; i < max; i++) {
+		count += bitset_get(bitset, i);
+	}
+	return count;
 }
 
 /* Permset checking */
@@ -97,21 +131,38 @@ int check_permset(const int n, const int p, const int* l, const int* r) {
 	id x;
 	int i, t;
 
-	id perms = fact(n);
-	unsigned char *T = malloc((perms/8+1));
-	for (x = 0; x < perms/8+1; x++) T[x] = 0;
+	id perms = fact(n), nperms;
+	bits *T = malloc((perms/NBITS+1)*sizeof(bits));
+	for (x = 0; x < perms/NBITS+1; x++) T[x] = 0;
 	bitset_set(T, 0);
 
 	for (i = 0; i < p; i++) {
+		fprintf(stderr, "Counting... "); fflush(stderr);
+		nperms = bitset_count(T, perms);
+		fprintf(stderr, "%ld \\ %ld = %ld\n", nperms, perms, perms / nperms);
 		fprintf(stderr, "Adding box %d: (%d, %d)\n", i, l[i], r[i]);
-		for (x = 0; x < perms; x++) {
-			if (bitset_get(T, x)) {
-				int perm[n];
-				perm_of_id(x, n, perm);
-				t = perm[l[i]];
-				perm[l[i]] = perm[r[i]];
-				perm[r[i]] = t;
-				bitset_set(T, id_of_perm(n, perm));
+		if (nperms < perms / 2) {
+			for (x = 0; x < perms; x++) {
+				if (bitset_get(T, x)) {
+					int perm[n];
+					perm_of_id(x, n, perm);
+					t = perm[l[i]];
+					perm[l[i]] = perm[r[i]];
+					perm[r[i]] = t;
+					bitset_set(T, id_of_perm(n, perm));
+				}
+			}
+		} else {
+			for (x = 0; x < perms; x++) {
+				if (!bitset_get(T, x)) {
+					int perm[n];
+					perm_of_id(x, n, perm);
+					t = perm[l[i]];
+					perm[l[i]] = perm[r[i]];
+					perm[r[i]] = t;
+					if (bitset_get(T, id_of_perm(n, perm)))
+						bitset_set(T, x);
+				}
 			}
 		}
 	}
