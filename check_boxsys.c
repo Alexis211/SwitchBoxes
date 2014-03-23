@@ -5,20 +5,20 @@
 /* Utility */
 
 void print_intlist(char* p, int n, int* perm) {
-	int i;
-	printf("%s: [", p);
-	for(i = 0; i < n; i++) {
-		if (i != 0) printf(", ");
-		printf("%d", perm[i]);
-	}
-	printf("]\n");
+  int i;
+  printf("%s: [", p);
+  for(i = 0; i < n; i++) {
+    if (i != 0) printf(", ");
+    printf("%d", perm[i]);
+  }
+  printf("]\n");
 }
 
 long long int fact(long long int n) {
-	if (n == 0)
-		return 1;
-	else
-		return n * fact(n-1);
+  if (n == 0)
+    return 1;
+  else
+    return n * fact(n-1);
 }
 
 /* Permutations */
@@ -26,63 +26,63 @@ long long int fact(long long int n) {
 typedef long long int id;
 
 id id_of_perm(const int n, int* perm) {
-	int i, j;
-	int lehmer[n];
-	id res = 0;
+  int i, j;
+  int lehmer[n];
+  id res = 0;
 
-	for (i = 0; i < n; i++) lehmer[i] = perm[i];
+  for (i = 0; i < n; i++) lehmer[i] = perm[i];
 
-	for (i = 0; i < n; i++) {
-		res += lehmer[i];
-		if (i != n-1) res *= n - 1 - i;
+  for (i = 0; i < n; i++) {
+    res += lehmer[i];
+    if (i != n-1) res *= n - 1 - i;
 
-		for (j = i + 1; j < n; j++) {
-			if (lehmer[j] > lehmer[i]) lehmer[j]--;
-		}
-	}
-	// print_intlist("Lehmer (id_of_perm)", n, lehmer);
+    for (j = i + 1; j < n; j++) {
+      if (lehmer[j] > lehmer[i]) lehmer[j]--;
+    }
+  }
+  // print_intlist("Lehmer (id_of_perm)", n, lehmer);
 
-	return res;
+  return res;
 }
 
 void perm_of_id(id x, const int n, int* perm) {
-	int i, j, t;
-	int lehmer[n];
+  int i, j, t;
+  int lehmer[n];
 
-	for (i = n-1; i >= 0; i--) {
-		lehmer[i] = x % (n-i);
-		x /= (n-i);
-	}
+  for (i = n-1; i >= 0; i--) {
+    lehmer[i] = x % (n-i);
+    x /= (n-i);
+  }
 
-	// print_intlist("Lehmer (perm_of_id)", n, lehmer);
+  // print_intlist("Lehmer (perm_of_id)", n, lehmer);
 
-	for (i = 0; i < n; i++) perm[i] = i;
+  for (i = 0; i < n; i++) perm[i] = i;
 
-	for (i = 0; i < n; i++) {
-		t = perm[i + lehmer[i]];
-		for (j = i + lehmer[i]; j > i; j--) perm[j] = perm[j-1];
-		perm[i] = t;
-	}
+  for (i = 0; i < n; i++) {
+    t = perm[i + lehmer[i]];
+    for (j = i + lehmer[i]; j > i; j--) perm[j] = perm[j-1];
+    perm[i] = t;
+  }
 }
 
 /* Bitsets */
 
 int bitset_get(unsigned char* bitset, id x) {
-	id pos = x / 8;
-	id sh = x % 8;
-	return (bitset[pos] >> sh) & 1;
+  id pos = x / 8;
+  id sh = x % 8;
+  return (bitset[pos] >> sh) & 1;
 }
 
 int bitset_set(unsigned char* bitset, id x) {
-	id pos = x / 8;
-	id sh = x % 8;
-	bitset[pos] |= (1 << sh);
+  id pos = x / 8;
+  id sh = x % 8;
+  bitset[pos] |= (1 << sh);
 }
 
 int bitset_unset(unsigned char* bitset, id x) {
-	id pos = x / 8;
-	id sh = x % 8;
-	bitset[pos] &= ~(1 << sh);
+  id pos = x / 8;
+  id sh = x % 8;
+  bitset[pos] &= ~(1 << sh);
 }
 
 /* Permset checking */
@@ -127,19 +127,19 @@ int check_permset(const int n, const int p, const int* l, const int* r) {
 
 
 int main() {
-	int i;
-	int n, p;
+  int i;
+  int n, p;
 
-	scanf(" %d %d", &n, &p);
-	int l[p], r[p];
+  scanf(" %d %d", &n, &p);
+  int l[p], r[p];
 
-	fprintf(stderr, "Checking permset n=%d p=%d\n", n, p);
+  fprintf(stderr, "Checking permset n=%d p=%d\n", n, p);
 	
-	for(i = 0; i < p; i++) {
-		scanf(" %d %d", &l[i], &r[i]);
-	}
+  for(i = 0; i < p; i++) {
+    scanf(" %d %d", &l[i], &r[i]);
+  }
 	
-	printf ("%d\n", check_permset(n, p, l, r));
+  printf ("%d\n", check_permset(n, p, l, r));
 
-	return 0;
+  return 0;
 }
