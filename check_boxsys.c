@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 
 /* Utility */
@@ -127,44 +128,92 @@ id bitset_count(bits *bitset, id max) {
 		r = fil droite de la boite #i
 */
 
+#define PARA 4		// number of parallel threads to launch
+
+struct task {
+	id begin, end;
+	bits *prev_T;
+	bits *my_T;
+	int n;
+	int l, r;
+	int way;		// 0 : propagate ones ; 1 : erase zeroes
+};
+
+void* do_task(void* p) {
+	struct task *t = (struct task*) p;
+
+	id x;
+	int temp;
+	const int n = t->n, l = t->l, r = t->r;
+
+	if (t->way == 0) {
+		for (x = t->begin; x < t->end; x++) {
+			if (bitset_get(t->prev_T, x)) {
+				int perm[n];
+				perm_of_id(x, n, perm);
+				temp = perm[l];
+				perm[l] = perm[r];
+				perm[r] = temp;
+				bitset_set(t->my_T, id_of_perm(n, perm));
+			}
+		}
+	} else {
+		for (x = t->begin; x < t->end; x++) {
+			if (!bitset_get(t->prev_T, x)) {
+				int perm[n];
+				perm_of_id(x, n, perm);
+				temp = perm[l];
+				perm[l] = perm[r];
+				perm[r] = temp;
+				if (bitset_get(t->prev_T, id_of_perm(n, perm)))
+					bitset_set(t->my_T, x);
+			}
+		}
+	}
+	fprintf(stderr, "%ld-%ld.", t->begin, t->end);
+	fflush(stderr);
+
+	return 0;
+}
+
 int check_boxsys(const int n, const int p, const int* l, const int* r) {
 	id x;
-	int i, t;
+	int i, j;
 
 	id perms = fact(n), nperms;
 	bits *T = malloc((perms/NBITS+1)*sizeof(bits));
 	for (x = 0; x < perms/NBITS+1; x++) T[x] = 0;
 	bitset_set(T, 0);
 
+	struct task t[PARA];
+	for (j = 0; j < PARA; j++) {
+		t[j].begin = ((id)j * perms) / PARA;
+		t[j].end = (((id)j+1) * perms) / PARA;
+		t[j].prev_T = T;
+		t[j].my_T = malloc((perms/NBITS+1)*sizeof(bits));
+		for (x = 0; x < perms/NBITS+1; x++) t[j].my_T[x] = 0;
+		t[j].n = n;
+	}
+	pthread_t thread[PARA];
+
 	for (i = 0; i < p; i++) {
 		fprintf(stderr, "Counting... "); fflush(stderr);
 		nperms = bitset_count(T, perms);
 		fprintf(stderr, "%ld \\ %ld = %ld\n", nperms, perms, perms / nperms);
 		fprintf(stderr, "Adding box %d: (%d, %d)\n", i, l[i], r[i]);
-		if (nperms < perms / 2) {
-			for (x = 0; x < perms; x++) {
-				if (bitset_get(T, x)) {
-					int perm[n];
-					perm_of_id(x, n, perm);
-					t = perm[l[i]];
-					perm[l[i]] = perm[r[i]];
-					perm[r[i]] = t;
-					bitset_set(T, id_of_perm(n, perm));
-				}
-			}
-		} else {
-			for (x = 0; x < perms; x++) {
-				if (!bitset_get(T, x)) {
-					int perm[n];
-					perm_of_id(x, n, perm);
-					t = perm[l[i]];
-					perm[l[i]] = perm[r[i]];
-					perm[r[i]] = t;
-					if (bitset_get(T, id_of_perm(n, perm)))
-						bitset_set(T, x);
-				}
-			}
+
+		for (j = 0; j < PARA; j++) {
+			t[j].l = l[i];
+			t[j].r = r[i];
+			t[j].way = (nperms > perms / 2 ? 1 : 0);
+			pthread_create(&thread[j], NULL, do_task, &t[j]);
 		}
+		for (j = 0; j < PARA; j++) {
+			pthread_join(thread[j], NULL);
+			for (x = 0; x < perms/NBITS+1; x++)
+				T[x] |= t[j].my_T[x];
+		}
+		fprintf(stderr, "OK.\n");
 	}
 
 	for (x = 0; x < perms; x++) {
