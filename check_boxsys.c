@@ -119,7 +119,7 @@ id bitset_count(bits *bitset, id max) {
 	return count;
 }
 
-/* Permset checking */
+/* Boxsys checking */
 
 /*		n = nombre de fils
 		p = nombre de boites
@@ -127,7 +127,7 @@ id bitset_count(bits *bitset, id max) {
 		r = fil droite de la boite #i
 */
 
-int check_permset(const int n, const int p, const int* l, const int* r) {
+int check_boxsys(const int n, const int p, const int* l, const int* r) {
 	id x;
 	int i, t;
 
@@ -190,7 +190,7 @@ int main() {
     scanf(" %d %d", &l[i], &r[i]);
   }
 	
-  printf ("%d\n", check_permset(n, p, l, r));
+  printf ("%d\n", check_boxsys(n, p, l, r));
 
   return 0;
 }
