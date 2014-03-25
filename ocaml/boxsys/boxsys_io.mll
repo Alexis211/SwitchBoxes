@@ -8,8 +8,8 @@ rule read = parse
 
 {
   
-type box = int * int
-type boxsys = int * (box list)
+type box    = Boxsys_ast.box
+type boxsys = Boxsys_ast.boxsys
 
 let file_to_boxsys (filename:string) :boxsys =
   let in_channel = open_in filename in
