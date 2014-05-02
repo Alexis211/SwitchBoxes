@@ -9,3 +9,6 @@ a.out
 *.cmx
 *.o
 *.bin
+*.aux
+*.log
+*.pdf
