@@ -8,6 +8,8 @@
 \usepackage{array,booktabs,longtable}
 \usepackage{multirow}
 \usepackage{listings}
+\usepackage{amssymb}
+\usepackage{amsmath}
 
 \usepackage{comment}
 
@@ -18,11 +20,38 @@
 
 \section{Abstract}
 In this contribution, we investigate the problem of "SwitchBoxes".
-The goal is, given $n$ wires, to generate all the permutations of these wires by using "boxes", that swap two wires. We tried to minimize the number of boxes that were necessary.
-We introduce a conjecture that puts our problem in relation with binary insertion sort. We successfully used a heavily optimized algorithm to prove this conjecture for small values of $n$.
+The goal is, given $n$ wires, to generate all the permutations of these wires by using "boxes",
+ that swap two wires. We tried to minimize the number of boxes that were necessary.
+We introduce a conjecture that puts our problem in relation with binary insertion sort. 
+We successfully used a heavily optimized algorithm to prove this conjecture for small values of $n$.
 
 \section{Introduction}
-The SwitchBoxes problem is a combinatory problem. Given $n$ wires, (coming from the top), we try to generate all the permutations of these wires by using boxes. A box takes two wires, and is allowed to swap these wires.
+The SwitchBoxes problem is a combinatory problem. Given $n$ wires, (coming from the top), 
+we try to generate all the permutations of these wires by using boxes. 
+A box takes two wires, and is allowed to swap these wires. We can concatenate these boxes to get a configuration of boxes.
+The configuration is said valid if, by swapping or not the wires on every box, we can obtain any permutation of the $n$ wires.
+
+Mathematically, we consider that the wires are numbers from 1 to $n$. A box is a permutation $\tau(\epsilon) = (i,j)^{\epsilon}$, where $\epsilon$ is equal to 0 or 1.
+A configuration of boxes C is the concatenation of k boxes $\tau_1, \ldots, \tau_k$, that means, $C(\epsilon_1, \ldots, \epsilon_k) = \tau_1^{\epsilon_1}\circ\ldots\circ\tau_k^{\epsilon_k}$.
+The configuration C is said valid if $C(\{0,1\}^k)= \mathfrak{S}_n$.
+
+Given this problem, we tried to determine the best lower bound of the number of boxes $k$.
+
+We can easily determine trivial lower and upper bounds of the number of boxes~:\\
+Given the fact that C is an application, we need to have $Card(\{0;1\}^{k}) \geq Card(\mathfrak{S}_n)$. We immediateley obtain that $k$ has to be greater than $\log_2(n!)$.\\
+We also have an upper bound~:
+The traditionnal bubblesort is a valid configuration of the SwitchBoxes problem. We obtain that the optimal k is smaller than $\frac{(n-1)(n-2)}{2}$.
+
+In this contribution, we first develop how the optimal k seems to be linked to the maximal number of comparisons for sorting n elements by binary insertion.
+We explain why we guess that those numbers are equal.
+
+In a second step, we show how we proved this conjecture for $n$ from 1 to 6, and how we demonstrated that the number of comparisons is an upper bound of the optimal number of boxes 
+for $n$ from 7 to 13 by optimizing the checking algorithm and by constructing a precise configuration.
+
+In addition, we give some ideas we tried to develop in order to prove mathematically this conjecture.
+
+In the rest of this paper, $opt_n$ will be the optimal number of boxes for $n$ wires.
+
 
 
 
