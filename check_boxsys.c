@@ -128,7 +128,7 @@ id bitset_count(bits *bitset, id max) {
 		r = fil droite de la boite #i
 */
 
-#define PARA 4		// number of parallel threads to launch
+#define PARA 1		// number of parallel threads to launch
 
 struct task {
 	id begin, end;
@@ -137,6 +137,7 @@ struct task {
 	int n;
 	int l, r;
 	int way;		// 0 : propagate ones ; 1 : erase zeroes
+	int noisy
 };
 
 void* do_task(void* p) {
@@ -170,13 +171,15 @@ void* do_task(void* p) {
 			}
 		}
 	}
-	fprintf(stderr, "%ld-%ld.", t->begin, t->end);
-	fflush(stderr);
+	if (t->noisy) {
+		fprintf(stderr, "%ld-%ld.", t->begin, t->end);
+		fflush(stderr);
+	}
 
 	return 0;
 }
 
-int check_boxsys(const int n, const int p, const int* l, const int* r) {
+int check_boxsys(const int n, const int p, const int* l, const int* r, int noisy) {
 	id x;
 	int i, j;
 
@@ -193,13 +196,17 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 		t[j].prev_T = T;
 		t[j].my_T = T2;
 		t[j].n = n;
+		t[j].noisy = noisy;
 	}
 	pthread_t thread[PARA];
 
-	prevnperms = 42;
 	nperms = 1;
 	for (i = 0; i < p; i++) {
-		fprintf(stderr, "Adding box %d: (%d, %d)\n", i, l[i], r[i]);
+		if (noisy) {
+			fprintf(stderr, "%3d. (%d, %d) ", i, l[i], r[i]); fflush(stderr);
+		} else {
+			fprintf(stderr, " (%d, %d)", l[i], r[i]); fflush(stderr);
+		}
 
 		for (j = 0; j < PARA; j++) {
 			t[j].l = l[i];
@@ -213,21 +220,48 @@ int check_boxsys(const int n, const int p, const int* l, const int* r) {
 		for (x = 0; x < perms/NBITS+1; x++) {
 			T[x] |= T2[x];
 		}
-		fprintf(stderr, "OK.\n");
 
-		fprintf(stderr, "Counting... "); fflush(stderr);
+		if (noisy) {
+			fprintf(stderr, " # "); fflush(stderr);
+		}
 		prevnperms = nperms;
 		nperms = bitset_count(T, perms);
-		fprintf(stderr, "%ld \\ %ld = %ld\n", nperms, perms, perms / nperms);
-		if (nperms == prevnperms) {
-			fprintf(stderr, ">> Useless box: (%d, %d) <<\n", l[i], r[i]);
+		if (noisy) {
+			fprintf(stderr, "%s %8ld \\ %ld = %ld",
+				(nperms == prevnperms ? "!" : " "),
+				nperms, perms, perms / nperms);
+			fprintf(stderr, "\n");
+		} else if (nperms == prevnperms) {
+			fprintf(stderr, "!"); fflush(stderr);
 		}
 	}
+	if (!noisy) fprintf(stderr,"\n");
 
 	free(T);
 	free(T2);
 	
 	return (nperms == perms ? 1 : 0);
+}
+
+
+int check_boxsys_removing_box(const int n, const int p, const int* l, const int* r, const int box) {
+	int i;
+	int ll[p-1], rr[p-1];
+	for (i = 0; i < p; i++) {
+		if (i < box) {
+			ll[i] = l[i];
+			rr[i] = r[i];
+		} else if (i > box) {
+			ll[i-1] = l[i];
+			rr[i-1] = r[i];
+		}
+	}
+	fprintf(stderr, "Check without box %d:\n", box);
+	if (check_boxsys(n, p-1, ll, rr, 0)) {
+		fprintf(stderr, "Ok, that box can be removed\n");
+	} else {
+		fprintf(stderr, "Cannot remove that box.\n");
+	}
 }
 
 
@@ -244,9 +278,14 @@ int main() {
     scanf(" %d %d", &l[i], &r[i]);
   }
 
-  int res = check_boxsys(n, p, l, r);
+  int res = check_boxsys(n, p, l, r, 1);
   fprintf(stderr, "%s\n", (res ? "It works!" : "It does not work..."));
   printf ("%d\n", res);
+
+  for (i = 0; i < p; i++) {
+	  fprintf(stderr, "\n");
+	  check_boxsys_removing_box(n, p, l, r, i);
+  }
 
   return 0;
 }
