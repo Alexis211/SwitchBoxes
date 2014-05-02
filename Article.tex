@@ -10,8 +10,12 @@
 \usepackage{listings}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{url}
 
 \usepackage{comment}
+
+\newtheorem*{Conj*}{Conjecture}
 
 \newcommand{\prog}[1]{{\tt#1}}
 \newcommand{\underscore}{$\_\,$}
@@ -45,7 +49,7 @@ The traditionnal bubblesort is a valid configuration of the SwitchBoxes problem.
 In this contribution, we first develop how the optimal k seems to be linked to the maximal number of comparisons for sorting n elements by binary insertion.
 We explain why we guess that those numbers are equal.
 
-In a second step, we show how we proved this conjecture for $n$ from 1 to 6, and how we demonstrated that the number of comparisons is an upper bound of the optimal number of boxes 
+In a second step, we show how we proved this conjecture for $n$ from 2 to 6, and how we demonstrated that the number of comparisons is an upper bound of the optimal number of boxes 
 for $n$ from 7 to 13 by optimizing the checking algorithm and by constructing a precise configuration.
 
 In addition, we give some ideas we tried to develop in order to prove mathematically this conjecture.
@@ -60,6 +64,40 @@ In the rest of this paper, $opt_n$ will be the optimal number of boxes for $n$ w
 
 \section{Our conjecture}
 
+To understand the problem, we first tried manually to get $opt_n$ for very small values of $n$.\\
+For $n=2$, the answer is quite simple~: One box is enough and necessary to swap the two wires.\\
+For $n=3$, two boxes aren't enough. Using a permutation, we can consider that the first box swap the wires 1 and 2, and that the second box swap the wires 2 and 3.
+Then the permutation $(1,3)$ can't be generated with this configuration. Hence, we have $opt_3=3$.
+
+For greater values of $n$, we implemented a naive and brutal algorithm that for $k$ given, creates all the possible configurations of $k$ boxes, 
+and checks if one of these configurations is valid. We first try it with $opt_{n-1}+1$. Then,  we increment $k$ and try again until we get a valid configuration.
+With this algorithm, we easily get $opt_n$.\\
+However, this only works for small values of $n$. For $n$ greater than 6, we lack memory and time to achieve the computation.
+
+Using this algorithm, we got the following results~:
+
+\begin{tabular}{|c|c|}
+\hline
+Number of wires $n$ & $opt_n$ \\
+\hline
+2 & 1 \\
+3 & 3 \\
+4 & 5 \\
+5 & 8 \\
+6 & 11 \\
+\hline
+\end{tabular}\\
+
+According to the fact that this sequence is exactly the beginning of the sequence A001855 of the Encyclopedia of Integer Sequences\footnote{The On-Line Encyclopedia of Integer Sequences, Sorting numbers: maximal number of comparisons for sorting n elements by binary insertion, \url{http://oeis.org/A001855}}, 
+corresponding to the maximal number of comparisons for sorting $n$ elements by binary insertion, we guessed that these sequences were equal.
+
+\Large
+\begin{Conj*}
+$opt_n$ is equal to the maximal number of comparisons for sorting $n$ elements by binary insertion.
+\end{Conj*}
+\normalsize
+
+In order to prove this conjecture for greater values, we tried to optimize our checking algorithm. That will be described in the next part.
 
 \section{Hypothesis box system}
 
