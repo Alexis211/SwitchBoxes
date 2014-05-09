@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{299.2bp}%
+    \setlength{\unitlength}{292.8bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,7 +48,7 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.87700535)%
+  \begin{picture}(1,0.97814208)%
     \put(0,0){\includegraphics[width=\unitlength]{4wires_box.pdf}}%
   \end{picture}%
 \endgroup%

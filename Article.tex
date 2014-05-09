@@ -17,8 +17,6 @@
 \usepackage{subcaption}
 
 \newcommand{\includesvg}[1]{%
-  \immediate\write18{inkscape -z -D --file=#1.svg %
-  --export-pdf=#1.pdf --export-latex}%
   \input{#1.pdf_tex}%
 }
 
