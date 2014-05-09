@@ -9,4 +9,3 @@ Article.pdf: $(IMG) Article.tex
 
 %.pdf_tex: %.svg
 	inkscape -z -D --file=$< --export-pdf=$(basename $@).pdf --export-latex
-	
