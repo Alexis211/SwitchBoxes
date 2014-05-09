@@ -1,4 +1,5 @@
 _build/*
+*/_build/*
 a.out
 *.swp
 *.native
@@ -8,3 +9,6 @@ a.out
 *.cmx
 *.o
 *.bin
+*.aux
+*.log
+*.pdf

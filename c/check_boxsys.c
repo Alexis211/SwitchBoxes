@@ -137,7 +137,7 @@ struct task {
 	int n;
 	int l, r;
 	int way;		// 0 : propagate ones ; 1 : erase zeroes
-	int noisy
+	int noisy;
 };
 
 void* do_task(void* p) {
