@@ -89,12 +89,6 @@ mathematically this conjecture.
 In the rest of this paper, $opt_n$ will be the optimal number of boxes for $n$
 wires.
 
-% Part 0. Introduction
-% Part 1. Conjecture
-% Part 2. Optimisation
-% Part 3. Pistes de recherche
-
-
 
 
 \section{Our conjecture}
@@ -143,19 +137,24 @@ algorithm, we easily get $opt_n$.\\
 However, this only works for small values of $n$. For $n$ greater than 6, we
 lack memory and time to achieve the computation.
 
-Using this algorithm, we got the following results~:
+Using this algorithm, we got the results in the table of figure~\ref{box-count}.
 
-\begin{tabular}{|c|c|}
-\hline
-Number of wires $n$ & $opt_n$ \\
-\hline
-2 & 1 \\
-3 & 3 \\
-4 & 5 \\
-5 & 8 \\
-6 & 11 \\
-\hline
-\end{tabular}\\
+\begin{figure}
+	\centering
+	\begin{tabular}{|c|c|}
+	\hline
+	Number of wires $n$ & $opt_n$ \\
+	\hline
+	2 & 1 \\
+	3 & 3 \\
+	4 & 5 \\
+	5 & 8 \\
+	6 & 11 \\
+	\hline
+	\end{tabular}
+	\caption{Minimum box count for small number of wires}
+	\label{box-count}
+\end{figure}
 
 According to the fact that this sequence is exactly the beginning of the
 sequence A001855 of the Encyclopedia of Integer Sequences\footnote{The On-Line
