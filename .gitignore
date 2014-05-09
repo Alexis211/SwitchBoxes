@@ -11,6 +11,3 @@ a.out
 *.bin
 *.aux
 *.log
-*.pdf
-!Article.pdf
-!svg/*.pdf
