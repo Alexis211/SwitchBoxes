@@ -12,3 +12,5 @@ a.out
 *.aux
 *.log
 *.pdf
+!Article.pdf
+!svg/*.pdf
