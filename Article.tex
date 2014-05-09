@@ -32,16 +32,16 @@
 
 \begin{document}
 
-\title{Paper without a name}
-\author{A. Auvolat \and A. Fromherz \and N. Jeannerod}
+\title{ Paper without a name }
+\author{A. Auvolat \and A. Fromherz \and N. Jeannerod }
 \date{June 01, 2014}
 \maketitle
 
 \begin{abstract}
 
-In this contribution, we investigate the problem of "SwitchBoxes".  The goal is,
+In this contribution, we investigate the problem of ``SwitchBoxes''.  The goal is,
 given $n$ wires, to generate all the permutations of these wires by using
-"boxes", that swap two wires. We tried to minimize the number of boxes that were
+``boxes'', that swap two wires. We tried to minimize the number of boxes that were
 necessary.  We introduce a conjecture that puts our problem in relation with
 binary insertion sort.  We successfully used a heavily optimized algorithm to
 prove this conjecture for small values of $n$.
@@ -96,18 +96,25 @@ wires.
 
 \begin{figure}
  \centering
- \vspace{+20pt}
- \def\svgwidth{0.15\textwidth}
- \includesvg{svg/2wires_box}
- \caption{Machin truc thingy}
+ \begin{minipage}{.5\textwidth}
+ 	\centering
+	 \def\svgwidth{0.2\textwidth}
+	 \includesvg{svg/2wires_box}
+	 \caption{Trivial solution for 2 wires}
+ \end{minipage}%
+ \begin{minipage}{.5\textwidth}
+ 	\centering
+	 \def\svgwidth{0.5\textwidth}
+	 \includesvg{svg/4wires_box}
+	 \caption{Simple non-optimal solution for 4 wires}
+ \end{minipage}
 \end{figure}
 
 \begin{figure}
- \centering
- \vspace{+20pt}
- \def\svgwidth{0.25\textwidth}
- \includesvg{svg/4wires_box}
- \caption{More stuff}
+	\centering
+	\def\svgwidth{0.6\textwidth}
+	\includesvg{svg/8wires_box}
+	\caption{Simple non-optimal solution for 8 wires}
 \end{figure}
 
 
