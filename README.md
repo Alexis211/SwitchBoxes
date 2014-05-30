@@ -1,5 +1,11 @@
+# Article, TODO
 
-
+- écrire l'algo dans un environnement algorithmic
+- expliquer ou on rencontre la suite A001855
+- dessiner des boxes
+- poser des questions ouvertes (nombre de permutations à la même taille)
+- expliquer les notions de q block,  p q lines, etc
+- expliquer l'intuition du système de boites
 
 # TODO
 
