@@ -22,6 +22,7 @@
 \newcommand{\includesvg}[1]{%
   \input{#1.pdf_tex}%
 }
+\newcommand{\comp}{\operatornamewithlimits{\bigcirc}}
 
 \graphicspath{{svg/}}
 
@@ -31,6 +32,7 @@
 \usepackage{comment}
 
 \newtheorem*{Conj*}{Conjecture}
+\newtheorem*{def*}{Définition}
 
 \newcommand{\prog}[1]{{\tt#1}}
 \newcommand{\underscore}{$\_\,$}
@@ -259,18 +261,21 @@ boxes were removed.
 
 \subsection{The basis box configuration}
 
-We first define the $q$-block at position $i$ by :
+We first define $B(q,i)$, the $q$-block at position $i$ by :
 
-$$B(q,i) = (q,q+2^i)(q+1,q+1+2^i)\cdots(q+2^i-1)(q+2*2^i-1)$$
-
+\begin{def*}
+$B(q,i) = (q,q+2^i)(q+1,q+1+2^i)\cdots(q+2^i-1,q+2*2^i-1) = \overset{2^{i}-1}{\underset{j=0}{\bigcirc}} (q+j,q+j+2^i)$
+\end{def*}
 For example: 
-$$B(0,i) = (i,i+1)$$
-$$B(1,i) = (i, i+2)(i+1, i+3)$$
-$$B(2, i) = (i,i+4)(i+1,i+5)(i+2,i+6)(i+3,i+7)$$
+$$B(q,0) = (q,q+1)$$
+$$B(q,1) = (q, q+2)(q+1, q+3)$$
+$$B(q,2) = (q,q+4)(q+1,q+5)(q+2,q+6)(q+3,q+7)$$
 
-Then, for $n=2^p$ we define for $q < p$ the $(p,q)$-line by :
+Then, for $n=2^p$ we define $L(p,q)$, for $q < p$ the $(p,q)$-line by :
 
-$$L(p,q) = B(q,0) B(q,2^{q+1}) \cdots B(q,2^p-2^{q+1})$$
+\begin{def*}
+$L(p,q) = B(q,0) B(q,2^{q+1}) \cdots B(q,2^p-2^{q+1})$
+\end{def*}
 
 For example:
 $$L(3,0) = (0,1)(2,3)(4,5)(6,7)$$
@@ -280,7 +285,9 @@ $$L(3,2) = (0,4)(1,5)(2,6)(3,7)$$
 We now conjecture that the following configuration generates all permutations
 for $n=2^p$ :
 
-$$C_{2^p}^0 = L(p,0) L(p,1) L(p,2) \cdots L(p,p-1) L(p,p-2) \cdots L(p,1) L(p,0)$$
+\begin{def*}
+$C_{2^p}^0 = L(p,0) L(p,1) L(p,2) \cdots L(p,p-1) L(p,p-2) \cdots L(p,1) L(p,0)$
+\end{def*}
 
 For example :
 
@@ -319,6 +326,10 @@ $$C_5^0 = (0,1)(2,3)(0,2)(1,3)(0,4)(0,2)(1,3)(0,1)(2,3)$$
         \caption{Solution for 6 wires}
     \end{minipage}
 \end{figure}
+
+\begin{Conj*}
+$C_n^0$ generates all permutations fon $n$
+\end{Conj*}
 
 \subsection{Testing the box system}
 
