@@ -193,7 +193,7 @@ On these representations, a box is a horizontal line that can swap the wires the
 
 For greater values of $n$, we implemented a naive and brutal algorithm that for
 $k$ given, creates all the possible configurations of $k$ boxes, and checks if
-one of these configurations is valid. We first try it with $opt_{n-1}+1$. Then,
+one of these configurations is valid. We first try it with $k = opt_{n-1}+1$. Then,
 we increment $k$ and try again until we get a valid configuration.  With this
 algorithm, we easily get $opt_n$.\\
 However, this only works for small values of $n$. For $n$ greater than 6, we
@@ -214,7 +214,7 @@ Using this algorithm, we got the results in the table of figure~\ref{box-count}.
     6 & 11 \\
     \hline
     \end{tabular}
-    \caption{Minimum box count for small number of wires}
+    \caption{Minimum box count for small number of wires, checked experimentally}
     \label{box-count}
 \end{figure}
 
@@ -222,12 +222,11 @@ According to the fact that this sequence is exactly the beginning of the $u_n$
 sequence described in the previous paragraph, our conjecture is that the
 sequences are equal.
 
-\Large
 \begin{Conj*}
 $opt_n$ is equal to the maximal number of comparisons for sorting $n$ elements
 by binary insertion.
 \end{Conj*}
-\normalsize
+
 
 In order to prove this conjecture for greater values, we tried to optimize our
 checking algorithm. That will be described in the next part.
