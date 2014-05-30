@@ -264,12 +264,18 @@ boxes were removed.
 We first define $B(q,i)$, the $q$-block at position $i$ by :
 
 \begin{def*}
-$B(q,i) = (q,q+2^i)(q+1,q+1+2^i)\cdots(q+2^i-1,q+2*2^i-1) = \overset{2^{i}-1}{\underset{j=0}{\bigcirc}} (q+j,q+j+2^i)$
+$$\begin{array}{l l l}
+	B(q,i) & = & (q,q+2^i)(q+1,q+1+2^i)\cdots(q+2^i-1,q+2*2^i-1) \\ & & \\
+		   & = & \overset{2^{i}-1}{\underset{j=0}{\bigcirc}} (q+j,q+j+2^i)
+	\end{array}$$
 \end{def*}
+
 For example: 
-$$B(q,0) = (q,q+1)$$
-$$B(q,1) = (q, q+2)(q+1, q+3)$$
-$$B(q,2) = (q,q+4)(q+1,q+5)(q+2,q+6)(q+3,q+7)$$
+$$\begin{array}{l l l}
+	B(q,0) &=& (q,q+1) \\
+	B(q,1) &=& (q, q+2)(q+1, q+3) \\
+	B(q,2) &=& (q,q+4)(q+1,q+5)(q+2,q+6)(q+3,q+7)
+\end{array}$$
 
 Then, for $n=2^p$ we define $L(p,q)$, for $q < p$ the $(p,q)$-line by :
 
@@ -292,14 +298,14 @@ $C_{2^p}^0 = L(p,0) L(p,1) L(p,2) \cdots L(p,p-1) L(p,p-2) \cdots L(p,1) L(p,0)$
 For example :
 
 $$
-\begin{aligned}
+\begin{array}{l l l}
     C_8^0 & = & L(3,0) L(3,1) L(3,2) L(3,1) L(3,0) \\
         & = & (0,1)(2,3)(4,5)(6,7) \\
         & & (0,2)(1,3)(4,6)(5,7) \\
         & & (0,4)(1,5)(2,6)(3,7) \\
         & & (0,2)(1,3)(4,6)(5,7) \\
         & & (0,1)(2,3)(4,5)(6,7)
-\end{aligned}$$
+\end{array}$$
 
 \subsection{Downscaling}
 
@@ -339,9 +345,11 @@ $$Perm_k = (b_1 b_2 \dots b_k)(\left\{0,1\right\}^k)$$
 
 These sets are recursively defined by :
 
-$$Perm_0 = { id }$$
-$$Perm_{k+1} = Perm_k \cup \left\{ \sigma \circ b_{k+1}, \; \sigma \in Perm_k
-\right\}$$
+$$\begin{array}{l l l}
+	Perm_0 &=& { id } \\
+	Perm_{k+1} &=& Perm_k \cup \left\{ \sigma \circ b_{k+1}, \; \sigma \in Perm_k
+\right\} 
+\end{array}$$
 
 The permutation set $Perm_p$ therefore contains all the possible permutations we
 can generate with the $p$ boxes. If $Perm_p = \mathfrak{S}_n$ then the box system
