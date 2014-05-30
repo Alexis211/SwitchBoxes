@@ -1,5 +1,6 @@
 \documentclass[11pt, a4paper]{article}
 
+\usepackage{color}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[margin=1.0in]{geometry}
@@ -73,6 +74,23 @@ $C(\epsilon_1, \ldots, \epsilon_k) =
 \tau_1^{\epsilon_1}\circ\ldots\circ\tau_k^{\epsilon_k}$.  The configuration $C$
 is said valid if $C(\{0,1\}^k)= \mathfrak{S}_n$.
 
+
+\begin{figure}
+ \centering
+ \begin{minipage}{.5\textwidth}
+    \centering
+     \def\svgwidth{0.5\textwidth}
+     \includesvg{svg/box0}
+     \caption{A switch box with control bit not set}
+ \end{minipage}%
+ \begin{minipage}{.5\textwidth}
+    \centering
+     \def\svgwidth{0.5\textwidth}
+     \includesvg{svg/box1}
+     \caption{A switch box with control bit set}
+ \end{minipage}
+\end{figure}
+
 Given this problem, we tried to determine the best lower bound of the number of
 boxes $k$ which is valid for $\mathfrak{S}_n$, ie generates all the permutations of $n$
 wires.
@@ -142,12 +160,14 @@ insertion sort running on a table of $n$ items.
 This algorithm progressively builds $S$, the table of the elements of $T$ in
 increasing order. This is done by progressively inserting the elements of $T$ in
 $S$ at a position calculated by the $FindPos$ function. The $FindPos$ function
-is based on a binary search, therefore does $O(log(S.size))$ comparisons.
+is based on a binary search, therefore does $O(log(\mathrm{size}(S)))$ comparisons.
 
 The $u_n$ suite is defined as follows :
 
-$$u_1 = 0$$
-$$\forall n \in \mathbb{N}^*, u_{n+1} = u_n + \ceil{log_2(n)}$$
+$$\begin{array}{r l l}
+	u_1 &=& 0 \\
+    \forall n \in \mathbb{N}^*, u_{n+1} &=& u_n + \ceil{log_2(n)}
+\end{array}$$
 
 This sequence is described on the OEIS\footnote{Online Encyclopedia of Integer
 Sequence}, and is referenced under the name A001855.
@@ -182,14 +202,6 @@ For $n=3$, two boxes aren't enough. Using a permutation, we can consider that
 the first box swap the wires 1 and 2, and that the second box swap the wires 2
 and 3.  Then the permutation $(1,3)$ can't be generated with this configuration.
 Hence, we have $opt_3=3$.
-
-
-\begin{figure}
-    \centering
-    \def\svgwidth{0.7\textwidth}
-    \includesvg{svg/boxsys-8-20}
-    \caption{Simple non-optimal solution for 8 wires}
-\end{figure}
 
 On these representations, a box is a horizontal line that can swap the wires the points are on.
 
@@ -309,6 +321,23 @@ $$
         & & (0,1)(2,3)(4,5)(6,7)
 \end{array}$$
 
+
+\begin{figure}
+    \centering
+    \def\svgwidth{0.7\textwidth}
+    \includesvg{svg/boxsys-8-20}
+    \caption{Representation of $C_8^0$}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \def\svgwidth{0.9\textwidth}
+    \includesvg{svg/intuition}
+    \caption{Explanation of our intuition leading to the construction of $C_{2^j}^0$}
+\end{figure}
+
+
+
 \subsection{Downscaling}
 
 For $n$ which is not a power of two, we construct $C_n^0$ by taking
@@ -325,13 +354,13 @@ $$C_5^0 = (0,1)(2,3)(0,2)(1,3)(0,4)(0,2)(1,3)(0,1)(2,3)$$
         \centering
         \def\svgwidth{0.7\textwidth}
         \includesvg{svg/boxsys-5-9}
-        \caption{Solution for 5 wires}
+        \caption{Solution for 5 wires: $C_5^0$}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
         \centering
         \def\svgwidth{0.85\textwidth}
         \includesvg{svg/boxsys-6-12}
-        \caption{Solution for 6 wires}
+        \caption{Solution for 6 wires: $C_6^0$}
     \end{minipage}
 \end{figure}
 
