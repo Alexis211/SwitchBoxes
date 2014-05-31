@@ -5,7 +5,8 @@
 - [DONE] dessiner des boxes
 - poser des questions ouvertes (nombre de permutations à la même taille)
 - [~] expliquer les notions de q block,  p q lines, etc
-- expliquer l'intuition du système de boites
+- [DONE] expliquer l'intuition du système de boites en français
+- expliquer l'intuition du système de boites en anglais
 - gérer les petites erreurs de syntaxes, unifier les symboles, ...
 
 # TODO
