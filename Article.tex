@@ -286,7 +286,7 @@ output as being one bus of two wires. The idea is thus relatively simple :
 \begin{itemize}
 	\item We begin with $n = 2^p$ simple wires
 	\item We group them two by two into $2^{p-1}$ buses of size $2$
-	\item We group the buses two by two into $2^{p-1}$ buses of size $4$
+	\item We group the buses two by two into $2^{p-2}$ buses of size $4$
 	\item \dots
 	\item We group the two buses of size $2^{p-1}$ into one bus of size $2^p$.
 \end{itemize}
@@ -333,8 +333,8 @@ $$\begin{array}{l l l}
 			\# \mathrm{group lines} + \# \mathrm{separate lines} - 1
 			\right) \\
 		&=& \frac{n}{2} (2 p - 1) \\
-		&=& n ^ {p - 1/2} \\
-		&=& n ^ {log_2 n - 1/2}
+		&=& n \cdot (p - 1/2) \\
+		&=& n \cdot (log_2 n - 1/2)
 \end{array}$$
 
 \subsection{The basis box configuration}
