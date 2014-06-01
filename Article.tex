@@ -271,6 +271,72 @@ We have managed to prove that this box system is valid for small values of $n$
 ($n \leq 13$), and have found that the box systems were still valid when some
 boxes were removed.
 
+\subsection{Explaining our intuition}
+
+We work here with $n = 2^p$ wires. Our idea is that we need to be able to route
+any of the $n$ input wires to any of the $n$ output wires. A box enables the
+{\em swapping} or {\em non-swapping} of two wires. Its behaviour is tightly
+linked with that of the two wires.
+
+We tried to imagine a step of {\em multiplexing} followed by a step of {\em
+demultiplexing}, that would regroup all the wires in one point before deciding
+which wire goes where. Since one box is plugged on two wires, we can imagine its
+output as being one bus of two wires. The idea is thus relatively simple :
+
+\begin{itemize}
+	\item We begin with $n = 2^p$ simple wires
+	\item We group them two by two into $2^{p-1}$ buses of size $2$
+	\item We group the buses two by two into $2^{p-1}$ buses of size $4$
+	\item \dots
+	\item We group the two buses of size $2^{p-1}$ into one bus of size $2^p$.
+\end{itemize}
+
+Now the demultiplexing step is just the opposite :
+
+\begin{itemize}
+	\item We begin with one bus of $2^p$ wires that we separate into two smaller
+	buses of $2^{p-1}$ wires
+	\item \dots
+	\item We separate the $2^{p-1}$ buses of 2 wires into $2^p$ simple wires.
+\end{itemize}
+
+The grouping/separation of wires requires a given number of boxes, and we tried
+to put just that number of boxes in the box system we designed. Grouping two
+buses of $k$ wires requires $k$ boxes.
+
+\begin{figure}
+    \centering
+    \def\svgwidth{0.9\textwidth}
+    \includesvg{svg/intuition}
+    \caption{Explanation of our intuition leading to the construction of $C_{2^j}^0$}
+\end{figure}
+
+We tried this box system and found, for small values of $n$, that it worked.
+
+\subsubsection{Number of boxes}
+
+Let $n = 2^p$ be the number of wires. On each line of grouping/separating we
+have $n/2$ boxes. We now need to count lines of grouping and of separating. We
+begin from $n=2^p$ wires and want to group them into 1 bus, therefore we need
+$p$ lines of grouping. Conversely, we then need to separate one bus into $2^p$
+wires, therefore requiring $p$ lines of separating.
+
+We notice that the last line of grouping and the first line of separating have
+exactly the same boxes and each wires is used by exactly one grouping box and
+one separating box. These two lines are thus redundant and we only put one of
+them.
+
+Finally :
+
+$$\begin{array}{l l l}
+	\# \mathrm{boxes} &=& \# \mathrm{boxes per line} \times \left(
+			\# \mathrm{group lines} + \# \mathrm{separate lines} - 1
+			\right) \\
+		&=& \frac{n}{2} (2 p - 1) \\
+		&=& n ^ {p - 1/2} \\
+		&=& n ^ {log_2 n - 1/2}
+\end{array}$$
+
 \subsection{The basis box configuration}
 
 We first define $B(q,i)$, the $q$-block at position $i$ by :
@@ -329,12 +395,6 @@ $$
     \caption{Representation of $C_8^0$}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \def\svgwidth{0.9\textwidth}
-    \includesvg{svg/intuition}
-    \caption{Explanation of our intuition leading to the construction of $C_{2^j}^0$}
-\end{figure}
 
 
 
